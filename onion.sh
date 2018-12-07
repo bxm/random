@@ -4,7 +4,7 @@ action() {
   : $((LAYER++))
   if [ ${LAYER} -le ${LAYERS} ] ; then
     if ${WRAP} ; then
-      gzip -c - 2>/dev/null | base64 -w0 2>/dev/null | action || return 1
+      gzip -c - 2>/dev/null | base64 2>/dev/null | action || return 1
     else
       base64 -i -d 2>/dev/null | gunzip -c - 2>/dev/null | action || return 1
     fi

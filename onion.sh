@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 action() {
-  if [ $((LAYER++)) -le ${LAYERS} ] ; then
+  : $((LAYER++))
+  if [ ${LAYER} -le ${LAYERS} ] ; then
     if ${WRAP} ; then
       gzip -c - 2>/dev/null | base64 -w0 2>/dev/null | action || return 1
     else

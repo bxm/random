@@ -42,10 +42,15 @@ main() {
   while [ $# -gt 0 ] ; do
     case "${1}" in
       ( --no-* ) [ -n "${FLAG[${1#--no-}]}" ] && FLAG[${1#--no-}]=false ;;
-      ( --* )    : ;; # ignore any malformed items
-      ( -[A-Z])  PARAM="${1#-}" ; PARAM="${PARAM,,}" ; SET_FLAG="$(grep -oE "(^| )${PARAM}[^ ]+( |$)" <<< "${!FLAG[@]}" | tr -d ' ')"
-                 [ -n "${SET_FLAG}" ] && FLAG[${SET_FLAG}]=false
-                 ;;
+      ( --* )    : ;; # ignore any malformed -- prefixed items
+      ( -[A-Z])
+        PARAM="${1#-}" # snip off the hyphen
+        PARAM="${PARAM,,}" # downcase
+        # search FLAG's keys for an item beginning with our letter, capture whole flag name
+        SET_FLAG="$(grep -oE "(^| )${PARAM}[^ ]+( |$)" <<< "${!FLAG[@]}" | tr -d ' ')"
+        # if we found something, set the flag using the captured value
+        [ -n "${SET_FLAG}" ] && FLAG[${SET_FLAG}]=false
+        ;;
     esac
     shift
   done

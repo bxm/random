@@ -22,7 +22,14 @@ api_query () {
 }
 
 main() {
-  SUM=$(sha1sum < <(echo -n "${*}"))
+  if [ $# -eq 0 ] ; then
+    read -s -p "Enter password: " PASSWORD
+    echo
+  else
+    PASSWORD="${*}"
+  fi
+
+  SUM=$(sha1sum < <(echo -n "${PASSWORD}"))
   SUM="${SUM// *}"
   local PREFIX=${SUM:0:5}
   local SUFFIX=${SUM:5}

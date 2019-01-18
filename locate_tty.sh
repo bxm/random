@@ -16,6 +16,7 @@ get_tty() {
 }
 
 print_if_tty() {
+  local tty
   [[ "${1}" =~ ^p?ttys?[0-9] ]] || return 0
 
   tty="/dev/${1}"
@@ -26,8 +27,8 @@ print_if_tty() {
 display_intent() {
   local SL=''
   local SEP=', '
+  local PAR="${!PARAMS[*]}"
   ${REGEX} && SEP='|' && SL='/'
-  PAR="${!PARAMS[*]}"
   echo "Locating terminals running: ${SL}${PAR// /${SEP}}${SL}"
 }
 

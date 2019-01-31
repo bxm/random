@@ -56,9 +56,15 @@ main() {
     done
   done
 
+  THIS_TTY="$(tty)"
   for TTY in "${!TTY_LIST[@]}" ; do
-    echo "Notifiying ${TTY} (matched on: ${TTY_LIST[${TTY}]// /, })"
-    echo -en '\007'> "${TTY}"
+    echo -n "Notifiying ${TTY} (matched on: ${TTY_LIST[${TTY}]// /, })"
+    if [ "${THIS_TTY}" = "${TTY}" ] ; then
+      echo " **here**"
+      else
+        echo
+        echo -en '\007'> "${TTY}"
+      fi
   done | sort
 
 }

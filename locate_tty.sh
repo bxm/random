@@ -61,10 +61,10 @@ main() {
     echo -n "Notifiying ${TTY} (matched on: ${TTY_LIST[${TTY}]// /, })"
     if [ "${THIS_TTY}" = "${TTY}" ] ; then
       echo " **here**"
-      else
-        echo
-        echo -en '\007'> "${TTY}"
-      fi
+    else
+      echo
+      echo -en '\007'> "${TTY}"
+    fi
   done | sort
 
 }

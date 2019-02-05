@@ -6,18 +6,17 @@ get_tty() {
   while read TTY COMM COMMAND; do
     if ${REGEX} ; then
       [ "${1,,}" = "${1}" ] && CASE=i || CASE=''
-      grep -Eq${CASE} "${1}" <<< "${COMM}" && print_if_tty "${TTY}"
-      grep -Eq${CASE} "${1}" <<< "${COMMAND}" && print_if_tty "${TTY}"
-      continue
+      grep -Eq${CASE} "${1}" <<< "${COMM}" && print_if_tty "${TTY}" && continue
+      grep -Eq${CASE} "${1}" <<< "${COMMAND}" && print_if_tty "${TTY}" && continue
     else
       [ "${1,,}" = "${COMM,,}" ] && print_if_tty "${TTY}"
     fi
-  done < <(ps -o tty=,comm=) | sort -u
+  done < <(ps -o "tty=,comm=,command=") | sort -u
 }
 
 print_if_tty() {
   local tty
-  [[ "${1}" =~ ^p?ttys?[0-9] ]] || return 0
+  [[ "${1}" =~ ^p?ttys?[0-9] ]] || return 1
 
   tty="/dev/${1}"
   [ -c "${tty}" ] && echo "${tty}"

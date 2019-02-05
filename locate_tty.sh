@@ -31,15 +31,31 @@ display_intent() {
   echo "Locating terminals running: ${SL}${PAR// /${SEP}}${SL}"
 }
 
+usage() {
+cat << EOF
+
+Usage: ${0##*/} [options] [search terms]
+
+Locate running proceses matching the search terms and send a BEL to their tty
+Processes not running on a tty will be ignored.
+By default, the search terms are exact matches on running commands (not their params).
+Without any search terms, defaults to "vim" and "ssh" (because that's useful to me)
+
+  -h | --help   this
+  -r | --regex  all search terms are regex and will match against the full command
+
+EOF
+
+}
+
 main() {
   declare -A PARAMS=()
   declare -A TTY_LIST=()
   declare REGEX=false
-  declare LOOP=false
   while [ $# -gt 0 ] ; do
     case "${1}" in
+      ( -h | --help  ) usage ;;
       ( -r | --regex ) REGEX=true ;;
-      ( -l | --loop  ) LOOP=true ;;
       ( *            ) PARAMS["${1}"]=1 ;;
     esac
     shift

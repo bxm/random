@@ -45,7 +45,7 @@ Without any search terms, defaults to "vim" and "ssh" (because that's useful to 
   -r | --regex  all search terms are regex and will match against the full command
 
 EOF
-
+exit
 }
 
 main() {

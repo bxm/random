@@ -41,28 +41,45 @@ Processes not running on a tty will be ignored.
 By default, the search terms are exact matches on running commands (not their params).
 Without any search terms, defaults to "vim" and "ssh" (because that's useful to me)
 
-  -h | --help   this
+  +             given terms will be appended to defaults (instead of replacing)
+  -q | --quiet  do not notify
   -r | --regex  all search terms are regex and will match against the full command
+
+  -h | --help   this
 
 EOF
 exit
+}
+
+set_defaults() {
+  if [ "${#PARAMS[@]}" -gt 0 ] && ! ${APPEND} ; then
+    DEFAULTS=()
+  fi
+
+  for ITEM in "${DEFAULTS[@]}" ; do
+    PARAMS["${ITEM}"]=1
+  done
 }
 
 main() {
   declare -A PARAMS=()
   declare -A TTY_LIST=()
   declare REGEX=false
+  declare APPEND=false
+  declare QUIET=false
+  declare -a DEFAULTS=(vim ssh)
   while [ $# -gt 0 ] ; do
     case "${1}" in
       ( -h | --help  ) usage ;;
+      ( -q | --quiet ) QUIET=true ;;
       ( -r | --regex ) REGEX=true ;;
-      ( *            ) PARAMS["${1}"]=1 ;;
+      ( + ) APPEND=true ;;
+      ( * ) PARAMS["${1}"]=1 ;;
     esac
     shift
   done
 
-  [ ${#PARAMS[@]} -le 0 ] && PARAMS=([vim]=1 [ssh]=1)
-
+  set_defaults
   display_intent
 
   for P in "${!PARAMS[@]}" ; do
@@ -73,12 +90,12 @@ main() {
 
   THIS_TTY="$(tty)"
   for TTY in "${!TTY_LIST[@]}" ; do
-    echo -n "Notifiying ${TTY} (matched on: ${TTY_LIST[${TTY}]// /, })"
+    echo -n "Found ${TTY} (matched on: ${TTY_LIST[${TTY}]// /, })"
     if [ "${THIS_TTY}" = "${TTY}" ] ; then
-      echo " **here**"
+      echo " **this TTY**"
     else
       echo
-      echo -en '\007'> "${TTY}"
+      ! ${QUIET} && echo -en '\007'> "${TTY}"
     fi
   done | sort
 

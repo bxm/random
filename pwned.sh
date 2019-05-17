@@ -13,7 +13,7 @@ verdict() {
     [ "${1}" -lt 0     ] && echo "Is the site down?" && return
     break
   done
-  echo -en "Pwned ${1} time${S}"
+  echo -e "Pwned ${1} time${S}"
   # [ "${1}" -gt 0 ] && echo " >>${2}<<" || echo
 }
 

@@ -6,6 +6,7 @@ get_tty() {
   while read TTY COMM COMMAND; do
     if ${REGEX} ; then
       [ "${1,,}" = "${1}" ] && CASE=i || CASE=''
+      # FIXME: this is slow, can we do with [[ =~ ]] ?
       grep -Eq${CASE} "${1}" <<< "${COMM}" && print_if_tty "${TTY}" && continue
       grep -Eq${CASE} "${1}" <<< "${COMMAND}" && print_if_tty "${TTY}" && continue
     else

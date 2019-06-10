@@ -8,4 +8,5 @@ _A collection of random/stupid/useful/useless/pointless stuff (delete as appropr
 | `obf.sh` | Encryption is so passé, but why settle for boring old ROT13 obfuscation, when you can supplement it with some other similarly bad ideas? |
 | `onion.sh` | A typical exercise is futility; adds/removes a defined number of gzip/base64 layers from a given input. Layers ... onion?  Geddit?! |
 | `pwned.sh` | Do you feel lucky, well do ya punk?  Make a query for a given password against the <https://haveibeenpwned.com/> API and see just _how_ bad your day can get! |
+| `split_mail.sh` | Also useful. Splits a large mail file into messages organised by date and hour, then deletes the original. |
 | `udecode.sh` | Quick and dirty URL decoder |

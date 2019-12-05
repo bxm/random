@@ -42,7 +42,7 @@ Processes not running on a tty will be ignored.
 By default, the search terms are exact matches on running commands (not their params).
 Without any search terms, defaults to "vim" and "ssh" (because that's useful to me)
 
-  +             given terms will be appended to defaults (instead of replacing)
+  +[TERM]       given terms will be appended to defaults (instead of replacing)
   -q | --quiet  do not notify
   -r | --regex  all search terms are regex and will match against the full command
 
@@ -74,8 +74,9 @@ main() {
       ( -h | --help  ) usage ;;
       ( -q | --quiet ) QUIET=true ;;
       ( -r | --regex ) REGEX=true ;;
-      ( + ) APPEND=true ;;
-      ( * ) PARAMS["${1}"]=1 ;;
+      ( +  ) APPEND=true ;;
+      ( +* ) APPEND=true ; PARAMS["${1#+}"]=1 ;;
+      ( *  ) PARAMS["${1}"]=1 ;;
     esac
     shift
   done
